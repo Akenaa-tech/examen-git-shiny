@@ -9,45 +9,44 @@ thematic::thematic_shiny(font = "auto")
 ui <- fluidPage(
   theme = bs_theme(
     version = 5,
-    bootswatch = "flatly" ),
+    bootswatch = "minty"),
   
   titlePanel("Exploration des Diamants"),
-  
+
   sidebarLayout(
     
     sidebarPanel(
       radioButtons(
-        inputId = "colorier", 
-        label = "Colorier les points en rose ?",
-        choices = list("Oui" = 1, "Non" = 2), 
+        inputId = "filtrage", 
+        label="Colorier les points en rose ?", 
+        choices = list("Oui"=1, "Non"=2), 
         selected = 1
       ),
       
       selectInput(
-        inputId = "filtre",
-        label = "Choisir une couleur à filtrer :",
-        choices = c("D","E","H","I","J"),
+        inputId = "couleur",
+        label = "Choisir une couleur à filtrer",
+        choices = c("D","E", "F", "G", "H", "I", "J"),
         selected = "J"
       ),
       
       sliderInput(
         inputId = "prix",
-        label = "Prix maximum :",
+        label = "Prix maximum",
         min = 300,
         max = 20000,
-        value = 3000
-      ),
+        value = 3000), 
       
-      actionButton( 
-        inputId = "boutton",
-        label = "Visualiser le graphe"
+      actionButton(
+        inputId = "boutton", 
+        label= "Visualiser le graphe"
       )
     ),
     
     mainPanel(
-      textOutput(outputId = "textstarwars"),
-      plotOutput(outputId = "StarWarsPlot"),
-      DT::DTOutput(outputId = "tableau")
+      textOutput(outputId = "DiamondsText"),
+      plotOutput(outputId = "DiamondsPolts"),
+      DT::DTOutput(outputId = "DiamondsTableau")
     )
   )
 )
@@ -59,21 +58,18 @@ server <- function(input, output) {
   rv <- reactiveValues()
   
   observeEvent(input$boutton, {
+    
     message(showNotification(
-      "La valeur du slider a changé !",
+      paste("Prix", inputId$prix, "& Color", inputId$couleur),
       type = "message"
     ))
     
-    rv$str <- starwars |> 
-      filter(height > input$Taille & gender == input$gender)
+    rv$str <- diamonds |> 
+      filter(price > input$prix & color == input$couleur)
     
-    rv$plo <- rv$str |>
-      ggplot(aes(x = height)) +
-      geom_histogram(
-        binwidth = 10, 
-        fill = "pink", 
-        color = "white") +
-      labs(title=paste("Genre choisi :", input$gender))
+    rv$couleur_points <- if (input$filtrage ==1) "pink" else "black"
+    
+    
     
   })
   

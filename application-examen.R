@@ -48,7 +48,6 @@ ui <- fluidPage(
     ),
     
     mainPanel(
-      textOutput(outputId = "DiamondsText"),
       plotlyOutput(outputId = "DiamondsPlots"),
       DT::DTOutput(outputId = "DiamondsTableau")
     )

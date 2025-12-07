@@ -69,8 +69,12 @@ server <- function(input, output) {
     
     rv$couleur_points <- if (input$filtrage ==1) "pink" else "black"
     
-    
-    
+    rv$graphique <- 
+      ggplot(rv$filtre, aes(price, carat)) + 
+      geom_point(color = rv$couleur_points) +
+      labs(
+        title = paste ("prix :", input$prix, "& color :", input$couleur)
+      )
   })
   
   

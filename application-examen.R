@@ -4,36 +4,46 @@ library(dplyr)
 library(DT)
 library(bslib)
 
-# Recopie star wars et changement de thème
-
-
 thematic::thematic_shiny(font = "auto")
 
 ui <- fluidPage(
   theme = bs_theme(
     version = 5,
-    bootswatch = "quartz"),
+    bootswatch = "flatly" ),
   
+  titlePanel("Exploration des Diamants"),
   
-  titlePanel("Star Wars"),
-  h1("Star Wars Characters"),
   sidebarLayout(
+    
     sidebarPanel(
-      actionButton(inputId = "boutton",
-                   label = "Clique moi"
+      radioButtons(
+        inputId = "colorier", 
+        label = "Colorier les points en rose ?",
+        choices = list("Oui" = 1, "Non" = 2), 
+        selected = 1
       ),
-      sliderInput(inputId = "Taille",
-                  label = "Taille des personnages",
-                  min = 0,
-                  max = 250,
-                  value = 30),
       
-      selectInput(inputId = "gender",
-                  label = "Genre",
-                  choices = c("feminine","masculine"),
-                  selected = "feminine"
+      selectInput(
+        inputId = "filtre",
+        label = "Choisir une couleur à filtrer :",
+        choices = c("D","E","H","I","J"),
+        selected = "J"
+      ),
+      
+      sliderInput(
+        inputId = "prix",
+        label = "Prix maximum :",
+        min = 300,
+        max = 20000,
+        value = 3000
+      ),
+      
+      actionButton( 
+        inputId = "boutton",
+        label = "Visualiser le graphe"
       )
     ),
+    
     mainPanel(
       textOutput(outputId = "textstarwars"),
       plotOutput(outputId = "StarWarsPlot"),
